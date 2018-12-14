@@ -2,6 +2,7 @@ package com.example.menno_000.journalapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ResourceCursorAdapter;
@@ -18,16 +19,29 @@ public class EntryAdapter extends ResourceCursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         String title = cursor.getString(cursor.getColumnIndex("title"));
         String timestamp = (Timestamp.valueOf(cursor.getString(4))).toString();
-        //String mood = cursor.getString(cursor.getColumnIndex("mood"));;
+        String mood = cursor.getString(cursor.getColumnIndex("mood"));;
 
         TextView EntryTitle = view.findViewById(R.id.entry_title);
         TextView TimeStamp = view.findViewById(R.id.entry_date);
-        //ImageView Mood = view.findViewById(R.id.entry_img);
-
-        //int img = context.getResources().getIdentifier(mood, "drawable", context.getPackageName());
+        ImageView Mood = view.findViewById(R.id.entry_img);
 
         EntryTitle.setText(title);
         TimeStamp.setText(timestamp);
-        //Mood.setImageResource(img);
+        switch(mood) {
+            case "happy":
+                Mood.setImageResource(R.drawable.happy);
+                break;
+            case "neutral":
+                Mood.setImageResource(R.drawable.neutral);
+                break;
+            case "tired":
+                Mood.setImageResource(R.drawable.tired);
+                break;
+            case "sad":
+                Mood.setImageResource(R.drawable.sad);
+                break;
+        }
+
+        Mood.setRotation(90);
     }
 }

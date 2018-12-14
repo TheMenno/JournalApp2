@@ -10,9 +10,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
-    EntryDatabase db;
+    EntryDatabase entryDatabase;
     ListView listview;
 
     // A listener that goes to a new view after an entry is chosen
@@ -21,13 +24,20 @@ public class MainActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
             // Retrieve chosen Entry
-            Cursor clickedCursor = (Cursor) adapterView.getItemAtPosition(i);
+            Cursor clickedEntry = (Cursor) adapterView.getItemAtPosition(i);
 
+            // Retrieve data from chosen Entry
+            String title = clickedEntry.getString(clickedEntry.getColumnIndex("title"));
+            String content = clickedEntry.getString(clickedEntry.getColumnIndex("content"));
+            String timestamp = (Timestamp.valueOf(clickedEntry.getString(4))).toString();
+            String mood = clickedEntry.getString(clickedEntry.getColumnIndex("mood"));
 
             // Give info to new view
             Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-            //notifyUser(clickedCursor.toString());
-            //intent.putExtra("clickedEntry", clickedEntry);
+            intent.putExtra("title", title);
+            intent.putExtra("content", content);
+            intent.putExtra("timestamp", timestamp);
+            intent.putExtra("mood", mood);
 
             startActivity(intent);
         }
@@ -39,10 +49,11 @@ public class MainActivity extends AppCompatActivity {
         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
             // Delete chosen entry
-            db.delete(l);
+            entryDatabase.delete(l);
 
             // Update the listview
-            EntryAdapter adapter = new EntryAdapter(MainActivity.this, db.selectAll());
+            EntryAdapter adapter = new EntryAdapter(MainActivity.this, entryDatabase
+                    .selectAll());
             listview.setAdapter(adapter);
 
             // Notify the user
@@ -58,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Set up the database
-        db = EntryDatabase.getInstance(getApplicationContext());
+        entryDatabase = EntryDatabase.getInstance(getApplicationContext());
 
         // Acts when floatingActionButton is clicked, go to next activity
         FloatingActionButton button = findViewById(R.id.main_newbutton);
@@ -75,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
         listview.setOnItemClickListener(new OnItemClickListener());
         listview.setOnItemLongClickListener(new OnLongItemClickListener());
 
-        EntryAdapter adapter = new EntryAdapter(MainActivity.this, db.selectAll());
+        EntryAdapter adapter = new EntryAdapter(MainActivity.this, entryDatabase
+                .selectAll());
         listview.setAdapter(adapter);
     }
 

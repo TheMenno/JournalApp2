@@ -32,6 +32,7 @@ public class EntryDatabase extends SQLiteOpenHelper {
         super(context, TABLE, null, VERSION);
     }
 
+    // Makes sure only one instance of the database exists
     public static EntryDatabase getInstance(Context context) {
         if (instance != null) {
             return instance;
@@ -42,6 +43,7 @@ public class EntryDatabase extends SQLiteOpenHelper {
     }
 
 
+    // Creates the database table
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
@@ -53,6 +55,7 @@ public class EntryDatabase extends SQLiteOpenHelper {
     }
 
 
+    // Reset the database
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE);
@@ -60,6 +63,7 @@ public class EntryDatabase extends SQLiteOpenHelper {
     }
 
 
+    // Add a new instance
     public void insert(JournalEntry entry){
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -73,12 +77,15 @@ public class EntryDatabase extends SQLiteOpenHelper {
     }
 
 
+    // Retrieve an instance
     public Cursor selectAll() {
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE,null);
         return cursor;
     }
 
+
+    // Delete an instance
     public void delete(long id) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         sqLiteDatabase.delete(TABLE,ID + "=" + id,null);

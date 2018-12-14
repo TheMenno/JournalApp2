@@ -48,6 +48,4 @@ public class JournalEntry implements java.io.Serializable {
     public void setMood(String mood) {
         this.mood = mood;
     }
-
-    //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 }

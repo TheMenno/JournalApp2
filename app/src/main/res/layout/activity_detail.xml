@@ -11,13 +11,15 @@
         android:id="@+id/detail_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="Title"
         android:textSize="30dp"/>
 
     <TextView
         android:id="@+id/detail_date"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="xxxx-xx-xx xx:xx:xx"
         android:textSize="22dp"/>
 
@@ -26,7 +28,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_margin="20dp"
         android:text="Content"
         android:textSize="20dp"/>
+
+    <ImageView
+        android:id="@+id/detail_image"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/happy"/>
 
 </LinearLayout>
