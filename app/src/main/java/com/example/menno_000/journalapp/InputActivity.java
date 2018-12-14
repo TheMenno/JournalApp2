@@ -29,6 +29,8 @@ public class InputActivity extends AppCompatActivity {
     ImageView buttontired;
     ImageView buttonsad;
 
+
+    // Finds the clicked mood and selects it
     public class Listener implements View.OnClickListener {
 
         @Override
