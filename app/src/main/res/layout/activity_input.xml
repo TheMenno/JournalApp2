@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp">
+
+    <EditText
+        android:id="@+id/input_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Title"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/input_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:hint="Content"
+        android:inputType="text"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/mood_happy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="A happy face"/>
+
+        <ImageView
+            android:id="@+id/mood_accomplished"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="An accomplished looking face"/>
+
+        <ImageView
+            android:id="@+id/mood_tired"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="A tired face" />
+
+        <ImageView
+            android:id="@+id/mood_sad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="A sad face"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/input_submitbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit entry!"/>
+
+</LinearLayout>
