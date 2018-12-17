@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +24,10 @@ public class InputActivity extends AppCompatActivity {
 
     EntryDatabase entryDatabase;
     String mood = "";
+    String title;
+    String edit;
+    String content;
+    int id = -1;
 
     ImageView buttonhappy;
     ImageView buttonneutral;
@@ -64,6 +69,37 @@ public class InputActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
 
+        // Find ImageButton views
+        buttonhappy = findViewById(R.id.mood_happy);
+        buttonneutral = findViewById(R.id.mood_neutral);
+        buttontired = findViewById(R.id.mood_tired);
+        buttonsad = findViewById(R.id.mood_sad);
+
+        // Receive data from previous screen
+        Intent intent = getIntent();
+
+        // Find out from which activity the intent came
+        edit = intent.getStringExtra("edit");
+
+        // Open data from previous screen
+        title = intent.getStringExtra("title");
+        content = intent.getStringExtra("content");
+        mood = intent.getStringExtra("mood");
+        id = intent.getIntExtra("id", -1);
+
+        // Find corresponding views
+        EditText editTitle = findViewById(R.id.input_title);
+        EditText editContent = findViewById(R.id.input_content);
+
+        // Set the data from the previous screen
+        // If the previous screen is MainActivity; nothing is set
+        // If the previous screen is DetailActivity; that data is set
+        editTitle.setText(title);
+        editContent.setText(content);
+
+        // Set the mood from the previous screen
+        setMood(mood);
+
         // Acts when Button is clicked, go to next activity
         Button button = findViewById(R.id.input_submitbutton);
         button.setOnClickListener(new View.OnClickListener() {
@@ -74,12 +110,6 @@ public class InputActivity extends AppCompatActivity {
             }
         });
 
-        // Find ImageButton views
-        buttonhappy = findViewById(R.id.mood_happy);
-        buttonneutral = findViewById(R.id.mood_neutral);
-        buttontired = findViewById(R.id.mood_tired);
-        buttonsad = findViewById(R.id.mood_sad);
-
         // Set listeners on ImageButtons
         buttonhappy.setOnClickListener(new Listener());
         buttonneutral.setOnClickListener(new Listener());
@@ -89,6 +119,50 @@ public class InputActivity extends AppCompatActivity {
         // Access the database
         entryDatabase = EntryDatabase.getInstance(getApplicationContext());
     }
+
+
+    // Save the mood on rotation
+    // Edittext saves automatically, so no need to do that here
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putSerializable("mood", mood);
+    }
+
+
+    // Restore the mood on rotation
+    @Override
+    protected void onRestoreInstanceState(Bundle inState) {
+        super.onRestoreInstanceState(inState);
+
+        // Retrieve the mood
+        mood = (String) inState.getSerializable("mood");
+
+        // Reset the selected mood
+        setMood(mood);
+    }
+
+
+    // Set the mood when something changes
+    public void setMood(String mood) {
+
+        switch(mood) {
+            case "happy":
+                select(buttonhappy);
+                break;
+            case "neutral":
+                select(buttonneutral);
+                break;
+            case "tired":
+                select(buttontired);
+                break;
+            case "sad":
+                select(buttonsad);
+                break;
+        }
+    }
+
 
     private void addEntry() {
 
@@ -113,6 +187,7 @@ public class InputActivity extends AppCompatActivity {
             Toast.makeText(this, "Don't forget to select a mood!", Toast.LENGTH_SHORT)
                     .show();
         }
+        // Insert the new data into the database
         else {
             values.put("title", title);
             values.put("content", content);
@@ -120,8 +195,18 @@ public class InputActivity extends AppCompatActivity {
 
             entryDatabase.insert(new JournalEntry(title, content, mood));
 
-            // Notify user
-            Toast.makeText(this, "Entry was added", Toast.LENGTH_SHORT).show();
+            // Delete old entry if it was edited
+            if (id > -1) {
+
+                entryDatabase.delete(id);
+
+                // Notify user
+                Toast.makeText(this, "Entry was updated", Toast.LENGTH_SHORT).show();
+            } else {
+
+                // Notify user
+                Toast.makeText(this, "Entry was added", Toast.LENGTH_SHORT).show();
+            }
 
             // Go back to the homescreen
             Intent intent = new Intent(this, MainActivity.class);

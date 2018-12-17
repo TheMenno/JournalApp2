@@ -9,9 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import java.sql.Timestamp;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
             String content = clickedEntry.getString(clickedEntry.getColumnIndex("content"));
             String timestamp = (Timestamp.valueOf(clickedEntry.getString(4))).toString();
             String mood = clickedEntry.getString(clickedEntry.getColumnIndex("mood"));
+            int id = clickedEntry.getInt(clickedEntry.getColumnIndex("_id"));;
 
             // Give info to new view
             Intent intent = new Intent(MainActivity.this, DetailActivity.class);
@@ -38,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("content", content);
             intent.putExtra("timestamp", timestamp);
             intent.putExtra("mood", mood);
+            intent.putExtra("id", id);
 
             startActivity(intent);
         }
@@ -94,6 +94,13 @@ public class MainActivity extends AppCompatActivity {
     // Go to the next activity
     private void toInputActivity() {
         Intent intent = new Intent(this, InputActivity.class);
+        intent.putExtra("title", "");
+        intent.putExtra("content", "");
+        intent.putExtra("mood", "");
+        intent.putExtra("edit", "false");
+        intent.putExtra("id", -1);
+
+
         this.startActivity(intent);
     }
 
